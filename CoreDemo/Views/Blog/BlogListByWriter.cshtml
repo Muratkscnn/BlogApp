@@ -1,0 +1,58 @@
+﻿@using EntityLayer.Concrete
+@model List<Blog>
+@{
+    ViewData["Title"] = "BlogListByWriter";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<h1>Yazarın Blogları</h1>
+<table class="table table-hover">
+    <tr>
+        <th>#</th>
+        <th>Blog Başlığı</th>
+        <th>Oluşturulma Tarihi</th>
+        <th>Kategori</th>
+        <th>Durum</th>
+        <th>Sil</th>
+        <th>Düzenle</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.BlogID</td>
+            <td>@item.BlogTitle</td>
+            <td>@(((DateTime)item.BlogCreateDate).ToString("dd-MMM-yyyy"))</td>
+            <td>@item.Category.CategoryName</td>
+            <td>@(item.BlogStatus ? "Aktif" :"Pasif")</td>
+            <td><a href="/Blog/DeleteBlog/@item.BlogID" class="btn btn-danger" id="Btnsil">Sil</a></td>
+            <td><a href="/Blog/EditBlog/@item.BlogID" class="btn btn-warning">Düzenle</a></td>
+        </tr>
+        
+    }
+</table>
+<a href="/Blog/BlogAdd" class="btn btn-info" id="btnadd">Yeni Blog Oluştur</a>
+
+
+<script>
+            $("#btnadd").click(function () {
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this imaginary file!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            swal("Poof! Your imaginary file has been deleted!", {
+                                icon: "success",
+
+                            });
+                            window.location = "/Blog/BlogAdd/"
+                        } else {
+                            swal("Your imaginary file is safe!");
+                        }
+                    });
+            });
+</script>
