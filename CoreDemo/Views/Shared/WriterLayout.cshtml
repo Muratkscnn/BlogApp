@@ -64,8 +64,13 @@
                         @await Component.InvokeAsync("WriterMessageNotification")
 
                     </li>
-                    @await Component.InvokeAsync("WriterNotification")
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+                            <i class="mdi mdi-bell-outline"></i>
+                            <span class="count-symbol bg-danger"></span>
+                        </a>
+                        @await Component.InvokeAsync("WriterNotification")
+                    </li>
                     <li class="nav-item nav-logout d-none d-lg-block">
                         <a class="nav-link" href="#">
                             <i class="mdi mdi-power"></i>
@@ -92,14 +97,14 @@
             </div>
         </div>
     </div>
+    <script src="~/writer/assets/vendors/chart.js/Chart.min.js"></script>
     <script src="~/writer/assets/vendors/js/vendor.bundle.base.js"></script>
     <script src="~/writer/assets/js/off-canvas.js"></script>
     <script src="~/writer/assets/js/hoverable-collapse.js"></script>
     <script src="~/writer/assets/js/misc.js"></script>
     <script src="~/writer/assets/js/dashboard.js"></script>
     <script src="~/writer/assets/js/todolist.js"></script>
-    <script src="~/writer/assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="~/writer/assets/vendors/js/vendor.bundle.base.js"></script>
+
 
 </body>
 </html>

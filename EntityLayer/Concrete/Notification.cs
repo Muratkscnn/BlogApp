@@ -12,6 +12,7 @@ namespace EntityLayer.Concrete
         public string NotificationType { get; set; }
         public string NotoificationTypeSymbol { get; set; }
         public string NotificationDetails { get; set; }
+        public string NotificationColor { get; set; }
         public DateTime NotificationDate { get; set; }
         public bool NotificationStatus { get; set; }
     }

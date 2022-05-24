@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLayer.Concrete;
+using DataAccessLayer.EntityFramework;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,10 @@ namespace CoreDemo.ViewComponents.Writer
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            Message2Manager mm = new Message2Manager(new EfMessage2Repository());
+            int id = 2;
+            var values = mm.GetInBoxListByWriter(id);
+            return View(values);
         }
     }
 }
