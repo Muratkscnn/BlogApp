@@ -22,7 +22,7 @@ namespace BlogApiDemo.Controllers
             }
 
         }
-
+      
         [HttpPost]
         public IActionResult EmployeeAdd(Employee employee)
         {

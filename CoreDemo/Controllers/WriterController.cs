@@ -7,6 +7,7 @@ using EntityLayer.Concrete;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,13 @@ namespace CoreDemo.Controllers
 {
     public class WriterController : Controller
     {
+        private readonly UserManager<AppUser> _userManager;
+
+        public WriterController(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+
+        }
 
         WriterManager wm = new WriterManager(new EfWriterRepository());
         [Authorize]
@@ -35,8 +43,9 @@ namespace CoreDemo.Controllers
             return View();
         }
 
-        public PartialViewResult WriterNavBarPartial()
+        public  PartialViewResult WriterNavBarPartial()
         {
+           
             return PartialView();
 
         }
@@ -46,33 +55,35 @@ namespace CoreDemo.Controllers
 
         }
 
-        public IActionResult EditProfile()
+        public async Task<IActionResult> EditProfile()
         {
-            var usermail = User.Identity.Name;
-            Context c = new Context();
-            var writerID = c.Writers.Where(x => x.WriterMail == usermail).Select(y => y.WriterID).FirstOrDefault();
-            var writervalues = wm.GetById(writerID);
-            return View(writervalues);
+
+            var values = await _userManager.FindByNameAsync(User.Identity.Name);
+            UserUpdateViewModel model = new UserUpdateViewModel()
+            {
+                namesurname = values.NameSurname,
+                username = values.UserName,
+                imageurl = values.ImageUrl,
+                mail = values.Email,
+            };
+
+            return View(model);
 
         }
         [HttpPost]
-        public IActionResult EditProfile(Writer p)
+        public async Task<IActionResult> EditProfile(UserUpdateViewModel p)
         {
-            WriterValidator wl = new WriterValidator();
-            ValidationResult results = wl.Validate(p);
-            if (results.IsValid)
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            user.NameSurname = p.namesurname;
+            user.Email = p.mail;
+            user.UserName = p.username;
+            user.ImageUrl = p.imageurl;
+            if (p.Password!=null)
             {
-                wm.TUpdate(p);
-                return RedirectToAction("Index", "Dashboard");
+                user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, p.Password);
             }
-            else
-            {
-                foreach (var item in results.Errors)
-                {
-                    ModelState.AddModelError(item.PropertyName, item.ErrorMessage);
-                }
-            }
-            return View();
+            var result=await _userManager.UpdateAsync(user);
+            return RedirectToAction("Index","Dashboard");
 
         }
         [HttpGet]
@@ -103,5 +114,6 @@ namespace CoreDemo.Controllers
             return RedirectToAction("Index", "Dashboard");
 
         }
+        
     }
 }

@@ -19,7 +19,6 @@ namespace CoreDemo.ViewComponents.Writer
         public IViewComponentResult Invoke()
         {
             var username = User.Identity.Name;
-            ViewBag.v = username;
             var usermail =c.Users.Where(x=>x.UserName==username).Select(y=>y.Email).FirstOrDefault();
             ViewBag.v1 = usermail;
             var writerID = c.Writers.Where(x => x.WriterMail == usermail).Select(y => y.WriterID).FirstOrDefault();

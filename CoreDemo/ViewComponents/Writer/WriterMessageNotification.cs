@@ -1,5 +1,7 @@
 ﻿using BusinessLayer.Concrete;
 using DataAccessLayer.EntityFramework;
+using EntityLayer.Concrete;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,10 +12,18 @@ namespace CoreDemo.ViewComponents.Writer
 {
     public class WriterMessageNotification : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        UserManager<AppUser> _userManager;
+
+        public WriterMessageNotification(UserManager<AppUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             Message2Manager mm = new Message2Manager(new EfMessage2Repository());
-            int id = 2;
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var id = user.Id;
             var values = mm.GetInBoxListByWriter(id);
             return View(values);
         }
