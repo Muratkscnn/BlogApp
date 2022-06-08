@@ -13,6 +13,7 @@ namespace BusinessLayer.Abstract
        // void CategoryDelete(Comment cooment);
        // void CategoryUpdate(Comment cooment);
         List<Comment> GetList(int id);
+        List<Comment> GetListWithBlog();
         //Comment GetById(int id);
     }
 }

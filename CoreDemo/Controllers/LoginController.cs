@@ -28,6 +28,10 @@ namespace CoreDemo.Controllers
         {
             return View();
         }
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
 
         [HttpPost]
         public async Task<IActionResult> Index(UserSignInViewModel p)
